@@ -1,30 +1,20 @@
 import asyncio
-from time import strftime
 import aiofiles
 import datetime
 
 from arg_parser import add_cli_options
+from read_chat import read_chat
+from write_chat import write_chat
 
-host, port, path_file_history = add_cli_options()
+cmd_args = add_cli_options()
 
-#formatted_date_3 = now.strftime("%Y-%m-%d-%H.%M.%S")
-async def mine_chat():
-    reader, writer = await asyncio.open_connection(
-        host, port)
-
-    while True:
-        current_data = datetime.datetime.now()
-        timestamp = int(current_data.timestamp())
-        date = datetime.datetime.fromtimestamp(timestamp)
-        now_strftime = date.strftime('%a %d %b %Y, %I:%M%p')
-        
-        data_chat = await reader.read(200)
-        new_message = f'[{now_strftime}] {data_chat.decode()}\n'
-        
-        async with aiofiles.open(path_file_history, "a", encoding='utf-8') as file:
-            await file.write(new_message)
-        
-        print(new_message)
-
-
-asyncio.run(mine_chat())
+async def main():
+    
+    task_1 = asyncio.create_task(read_chat())
+    task_2 = asyncio.create_task(write_chat("FgFg", "some text"))
+    
+    await task_1
+    await task_2        
+  
+if __name__ == "__main__":
+    asyncio.run(main())

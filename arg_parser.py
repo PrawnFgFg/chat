@@ -30,4 +30,4 @@ def add_cli_options():
         default=path_to_file_history
     )
     
-    return host, port, path_to_file_history
+    return parser.parse_args()
