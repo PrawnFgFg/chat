@@ -22,6 +22,7 @@ async def mine_chat():
             await file.write(new_message)
         
         print(new_message)
+        print(1)
    
         
 
