@@ -25,4 +25,5 @@ async def read_chat():
             await file.write(new_message)
         
         print(new_message)
+   
         
