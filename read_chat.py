@@ -1,6 +1,7 @@
 import asyncio
 import aiofiles
 import datetime
+import logging
 
 from arg_parser import add_cli_options
 
@@ -25,5 +26,6 @@ async def read_chat():
             await file.write(new_message)
         
         print(new_message)
+        logging.info(new_message)
    
         

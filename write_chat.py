@@ -3,6 +3,7 @@ import asyncio
 import datetime
 
 import aiofiles
+import logging
 
 from arg_parser import add_cli_options
 
@@ -15,16 +16,20 @@ async def write_chat():
         cmd_args.host, port=5050)     
     
     greeting = await reader.read(400) # Hello %username%! Enter your personal hash or leave it empty to create new account.
-    print(f"{greeting.decode()}")    
+    greeting_mess_1 = greeting.decode()
+    print(greeting_mess_1)    
+    logging.info(greeting_mess_1)
     
     hash = "10209158-dc35-11f0-a5a4-0242ac110003\n"  # 10209158-dc35-11f0-a5a4-0242ac110003
     writer.write(hash.encode('utf-8'))
     await writer.drain()  
     print(f"{hash.strip()}") # выводим в терминал или нет
- 
+    logging.info(hash)
+    
     greeting_next = await reader.read(400) # {"nickname": "Goofy mvz", "account_hash": "10209158-dc35-11f0-a5a4-0242ac110003"}
     greeting_message = greeting_next.decode()     #Welcome to chat! Post your message below. End it with an empty line.
     print(greeting_message)
+    logging.info(greeting_message)
     
   
     current_data = datetime.datetime.now()
@@ -36,6 +41,10 @@ async def write_chat():
     writer.write(message.encode("utf-8"))
     await writer.drain()
     print(message.strip())
+    logging.info(message)
+    
+    writer.close()
+    await writer.wait_closed()
     
  
     
