@@ -13,11 +13,11 @@ cmd_args = add_cli_options()
 
 async def main():
     
-    task_1 = asyncio.create_task(read_chat())
+    # task_1 = asyncio.create_task(read_chat())
     task_2 = asyncio.create_task(write_chat())
     
     
-    await asyncio.gather(task_1, task_2)  
+    await asyncio.gather(task_2)  
 
   
 if __name__ == "__main__":
