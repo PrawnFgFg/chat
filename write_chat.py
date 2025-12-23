@@ -18,7 +18,7 @@ cmd_args = add_cli_options()
 
 now_time = get_current_time()
 
-async def write_chat(nickname: str = "No_name", token: str = HASH_TOKEN):
+async def write_chat(nickname: str = "No_name1", token: str = HASH_TOKEN):
     
     reader, writer = await asyncio.open_connection(host=cmd_args.host, port=PORT_TO_WRITE)
     
@@ -44,6 +44,9 @@ async def write_chat(nickname: str = "No_name", token: str = HASH_TOKEN):
             new_account_info = await reader.readline()
             logging.info(new_account_info.decode().strip())
             new_account_data: dict = json.loads(new_account_info.decode().strip())
+            
+            with open('./bd_accounts_hash.json', "w", encoding="utf-8") as file:
+                json.dump(new_account_data, file, indent=4)
             
             new_account_hash = new_account_data.get("account_hash")
             
