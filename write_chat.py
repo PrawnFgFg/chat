@@ -45,6 +45,9 @@ async def authorise(token: str = cmd_args.token):
     except Exception as e:
         print(f"Error during connection: {e}")
         raise
+    
+    except asyncio.CancelledError:
+        print("Работа завершена")
 
         
  
@@ -78,6 +81,9 @@ async def register(nickname=cmd_args.nickname):
     except Exception as e:
         print(f"Error during connection: {e}")
         raise
+    
+    except asyncio.CancelledError:
+        print("Работа завершена")
 
 
 async def submit_message(writer, nickname: str, message: str = cmd_args.message):

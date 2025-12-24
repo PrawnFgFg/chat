@@ -29,6 +29,9 @@ async def read_chat():
         print(f"Error during connection: {e}")
         raise
     
+    except asyncio.CancelledError:
+        print("Работа завершена")
+    
     finally:
         writer.close()
         await writer.wait_closed()
