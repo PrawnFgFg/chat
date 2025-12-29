@@ -48,6 +48,8 @@ async def authorise(token: str = cmd_args.token):
     
     except asyncio.CancelledError:
         print("Работа завершена")
+        
+
 
         
  
@@ -76,6 +78,8 @@ async def register(nickname=cmd_args.nickname):
         with open('./bd_accounts_hash.json', "a", encoding="utf-8") as file:
             json.dump(new_account_data, file, indent=4)
         
+        await submit_message(writer, nickname)
+        
         return writer, nickname
     
     except Exception as e:
@@ -84,6 +88,7 @@ async def register(nickname=cmd_args.nickname):
     
     except asyncio.CancelledError:
         print("Работа завершена")
+        
 
 
 async def submit_message(writer, nickname: str, message: str = cmd_args.message):

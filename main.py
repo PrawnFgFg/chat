@@ -11,11 +11,13 @@ cmd_args = add_cli_options()
 
 async def main():
     
-    # new_user = await register("Jacky") 
-    
-    user = await authorise()
-    await submit_message(user[0], user[1])
-    await read_chat()
+    try:
+        user_writer, user_nickname = await authorise()
+        await submit_message(user_writer, user_nickname)
+        await read_chat()
+        
+    finally:
+        user_writer.close()
     
 
   
