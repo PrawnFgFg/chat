@@ -1,31 +1,18 @@
-
 import asyncio
-import aiofiles
 import logging
 import json
-import os
-from dotenv import load_dotenv
 
-load_dotenv()
-
-from arg_parser import add_cli_options
 from utils import get_current_time
 
-PORT_TO_WRITE = os.getenv("PORT_TO_WRITE")
-
-cmd_args = add_cli_options()
-
-now_time = get_current_time()
-
-async def authorise(token: str = cmd_args.token):
+async def authorise(port_to_write: int, cmd_args: str):
     
-    reader, writer = await asyncio.open_connection(host=cmd_args.host, port=PORT_TO_WRITE)
+    reader, writer = await asyncio.open_connection(host=cmd_args.host, port=port_to_write)
     
     try:
         welcome = await reader.readline()
         logging.info(welcome.decode().strip())
         
-        writer.write(f"{token}\n".encode())
+        writer.write(f"{cmd_args.token}\n".encode())
         await writer.drain()
         
         account_info: bytes = await reader.readline()
@@ -49,13 +36,11 @@ async def authorise(token: str = cmd_args.token):
     except asyncio.CancelledError:
         print("Работа завершена")
         
-
-
         
  
-async def register(nickname=cmd_args.nickname):
+async def register(nickname, cmd_args, port_to_write):
     
-    reader, writer = await asyncio.open_connection(host=cmd_args.host, port=PORT_TO_WRITE)
+    reader, writer = await asyncio.open_connection(host=cmd_args.host, port=port_to_write)
     
     try:
         welcome = await reader.readline()
@@ -91,10 +76,11 @@ async def register(nickname=cmd_args.nickname):
         
 
 
-async def submit_message(writer, nickname: str, message: str = cmd_args.message):
-    writer.write(message.encode())
+async def submit_message(writer, nickname: str, cmd_args):
+    now_time = get_current_time()
+    writer.write(cmd_args.message.encode())
     await writer.drain()
-    print(f'[{now_time}] {nickname}: {message}'.strip())
+    print(f'[{now_time}] {nickname}: {cmd_args.message}'.strip())
     
         
     

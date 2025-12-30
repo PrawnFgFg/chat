@@ -2,13 +2,9 @@ import asyncio
 import aiofiles
 import logging
 
-from arg_parser import add_cli_options
 from utils import get_current_time
 
-
-cmd_args = add_cli_options()
-
-async def read_chat():
+async def read_chat(cmd_args):
     now_time = get_current_time()
     
     reader, writer = await asyncio.open_connection(
