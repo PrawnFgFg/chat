@@ -7,6 +7,7 @@ load_dotenv()
 path_to_file_history = os.getenv("PATH_TO_FILE_HISTORY")
 host = os.getenv("HOST")
 port = os.getenv("PORT_TO_READ")
+port_write = os.getenv("PORT_TO_WRITE")
 hash_token = os.getenv("HASH_TOKEN")
 
 def add_cli_options():
