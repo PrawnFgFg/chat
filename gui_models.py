@@ -1,7 +1,9 @@
 from enum import Enum
 
+
 class TkAppClosed(Exception):
     pass
+
 
 class ReadConnectionStateChanged(Enum):
     INITIATED = 'устанавливаем соединение'
@@ -11,6 +13,7 @@ class ReadConnectionStateChanged(Enum):
     def __str__(self):
         return str(self.value)
 
+
 class SendingConnectionStateChanged(Enum):
     INITIATED = 'устанавливаем соединение'
     ESTABLISHED = 'соединение установлено'
@@ -18,6 +21,7 @@ class SendingConnectionStateChanged(Enum):
 
     def __str__(self):
         return str(self.value)
+
 
 class NicknameReceived:
     def __init__(self, nickname):

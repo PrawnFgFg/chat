@@ -2,5 +2,9 @@ aiofiles==25.1.0
 anyio==4.12.1
 async-timeout==5.0.1
 dotenv==0.9.9
+flake8==7.3.0
 idna==3.11
+mccabe==0.7.0
+pycodestyle==2.14.0
+pyflakes==3.4.0
 python-dotenv==1.2.1
