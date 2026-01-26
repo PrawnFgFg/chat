@@ -102,10 +102,23 @@ async def draw(messages_queue, sending_queue, status_updates_queue):
     
     try:
         async with create_task_group() as tg:
-            tg.start_soon(update_tk, root_frame)
-            tg.start_soon(update_conversation_history, conversation_panel, messages_queue)
-            tg.start_soon(update_status_panel, status_labels, status_updates_queue)
+            
+            tg.start_soon(
+                update_tk, 
+                root_frame
+                )
+            
+            tg.start_soon(
+                update_conversation_history, 
+                conversation_panel, 
+                messages_queue
+                )
+            
+            tg.start_soon(
+                update_status_panel, 
+                status_labels, 
+                status_updates_queue
+                )
+            
     except Exception:
         raise TkAppClosed
-    
-

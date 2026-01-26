@@ -7,4 +7,3 @@ class MainException(Exception):
         
 class InvalidTokenException(MainException):
     detail = "Неверный токен"
-    

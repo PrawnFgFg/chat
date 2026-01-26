@@ -71,25 +71,70 @@ async def authorise(
     except asyncio.CancelledError:
         print("Работа завершена в writer")
         
-        
  
+# async def register_account(
+#     nickname, 
+#     host, 
+#     port_to_write,
+#     queue,
+#     queue_status,
+#     watchdog_queue,
+# ):
+#     timestamp = int(time.time())
+    
+#     reader, writer = await asyncio.open_connection(host=host, port=port_to_write)
+    
+#     try:
+#         welcome = await reader.readline()
+#         logging.info(welcome.decode().strip())
+        
+#         watchdog_queue.put_nowait(f'[{timestamp}] Connection is alive. Prompt before auth')
+                
+#         writer.write("\n".encode())
+#         await writer.drain()
+        
+#         enter_your_nickname = await reader.readline()
+#         logging.info(enter_your_nickname.decode().strip())
+        
+#         writer.write(f"{nickname}\n".encode())
+#         await writer.drain()
+                
+#         new_account_info = await reader.readline()
+#         logging.info(new_account_info.decode().strip())
+#         new_account_data: dict = json.loads(new_account_info.decode().strip())
+#         nickname = new_account_data.get("nickname")
+        
+#         with open('./bd_accounts_hash.json', "a", encoding="utf-8") as file:
+#             json.dump(new_account_data, file, indent=4)
+        
+#         event_nickname = NicknameReceived(nickname)
+        
+#         if event_nickname:
+#             watchdog_queue.put_nowait(f'[{timestamp}] Connection is alive. Authorization done')
+        
+#         queue_status.put_nowait(nickname)
+        
+#         return new_account_data
+    
+#     except Exception as e:
+#         print(f"Error during connection: {e}")
+#         raise
+    
+#     except asyncio.CancelledError:
+#         print("Работа завершена")
+
+
 async def register_account(
     nickname, 
     host, 
     port_to_write,
-    queue,
-    queue_status,
-    watchdog_queue,
 ):
-    timestamp = int(time.time())
     
     reader, writer = await asyncio.open_connection(host=host, port=port_to_write)
     
     try:
         welcome = await reader.readline()
         logging.info(welcome.decode().strip())
-        
-        watchdog_queue.put_nowait(f'[{timestamp}] Connection is alive. Prompt before auth')
                 
         writer.write("\n".encode())
         await writer.drain()
@@ -105,15 +150,8 @@ async def register_account(
         new_account_data: dict = json.loads(new_account_info.decode().strip())
         nickname = new_account_data.get("nickname")
         
-        with open('./bd_accounts_hash.json', "a", encoding="utf-8") as file:
+        with open(f'./bd_accounts_hash.json', "a", encoding="utf-8") as file:
             json.dump(new_account_data, file, indent=4)
-        
-        event_nickname = NicknameReceived(nickname)
-        
-        if event_nickname:
-            watchdog_queue.put_nowait(f'[{timestamp}] Connection is alive. Authorization done')
-        
-        queue_status.put_nowait(nickname)
         
         return new_account_data
     
@@ -122,16 +160,14 @@ async def register_account(
         raise
     
     except asyncio.CancelledError:
-        print("Работа завершена")
+        print("Работа завершена")    
         
-
 
 async def submit_message(writer, nickname: str, cmd_args, queue):
     now_time = get_current_time()
     writer.write(cmd_args.message.encode())
     await writer.drain()
     await queue.get(f'[{now_time}] {nickname}: {cmd_args.message}'.strip())
-    
 
 async def save_messages(host, port, filepath, queue, queue_status):
     await read_chat(
@@ -141,9 +177,6 @@ async def save_messages(host, port, filepath, queue, queue_status):
         queue=queue,
         queue_status=queue_status
     )
-        
-
-
 
 async def send_msgs(host, port, queue, token, queue_status, watchdog_queue):
     timestamp = int(time.time())
@@ -206,5 +239,3 @@ async def send_empty_msg(
             if cm.expired() is True:
                 print("Ошибка, сервер долго не получал пустое сообщение", cm.expired())
                 raise gaierror
-
-

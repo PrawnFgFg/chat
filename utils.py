@@ -1,6 +1,5 @@
 import datetime
 
-
 def get_current_time():
     current_data = datetime.datetime.now()
     timestamp = int(current_data.timestamp())

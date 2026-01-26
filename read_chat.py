@@ -89,9 +89,3 @@ async def watch_for_connection(watchdog_queue: asyncio.Queue):
             if cm.expired() is True:
                 print(f"[{timestamp}] 10s timeout is elapsed")
                 raise ConnectionError
-
-        
-     
-      
-            
-        

@@ -12,7 +12,6 @@ from write_chat import save_messages
 from main_connection import handle_connection
 
 
-
 PORT_TO_WRITE = os.getenv("PORT_TO_WRITE")
 
 cmd_args = add_cli_options()
@@ -36,9 +35,25 @@ async def main(
     
     try:
         async with create_task_group() as tg:
-            tg.start_soon(draw, messages_queue, sending_queue, status_updates_queue)
-            tg.start_soon(save_messages, host, port_to_read, path_history, messages_queue, status_updates_queue)
-            tg.start_soon(handle_connection, 
+            
+            tg.start_soon(
+                draw, 
+                messages_queue, 
+                sending_queue, 
+                status_updates_queue
+                )
+            
+            tg.start_soon(
+                save_messages, 
+                host, 
+                port_to_read, 
+                path_history, 
+                messages_queue, 
+                status_updates_queue
+                )
+            
+            tg.start_soon(
+                handle_connection, 
                 host,
                 port_to_read,
                 port_to_write,
@@ -49,23 +64,15 @@ async def main(
                 sending_queue,
                 status_updates_queue,
                 )
+            
     except ExceptionGroup as eg:
             for e in eg.exceptions:
                 if isinstance(e, TkAppClosed):   
                     print("Завершение программы")
-                
+
 
 if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
         print("\nПрограмма корректно завершена пользователем")
-    
-   
-    
-    
-    
-  
-    
-
-    
